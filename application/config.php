@@ -237,6 +237,7 @@ return [
         'type'      => 'bootstrap',
         'var_page'  => 'page',
         'list_rows' => 15,
+        'newstyle'  => true,
     ],
     //路径设置
     'view_replace_str'  =>  [

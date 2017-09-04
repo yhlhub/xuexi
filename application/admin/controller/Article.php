@@ -16,12 +16,15 @@ class Article extends BaseController
         $new = $this->loadArticleList(input());
         $this->assign('new',$new);
         $this->assign('input',input());
+        //统计id
+        $id = Db::name('article')->where('id > 0')->count();
+        $this->assign('id',$id);
         // 显示资源列表
         $this->assign('title','咨询列表');
         return $this->fetch('article_list');
     }
 
-    protected function loadArticleList($input,$pageSize=10,$state = 'publish')
+    protected function loadArticleList($input,$pageSize=15,$state = 'publish')
     {
         $m = new \app\admin\model\Article();
 //        $m = Db::name('article')->alias('a')->join('column b','a.cid = b.html_value')->where('state','=',$state);
@@ -38,7 +41,7 @@ class Article extends BaseController
                 $m->where('title','like','%'.$input['title'].'%');
             }
         }
-        return $m->paginate($pageSize);
+        return $m->paginate($pageSize);       
     }
 
     /**
@@ -160,7 +163,11 @@ class Article extends BaseController
     {
         Db::name('Article')->where('id',$id)->delete();
         return true;
-        // if($del) return $this->success('删除成功','Article/index');
-        // else return $this->error('删除失败');
+    }
+    public function alldelete()
+    {
+       $ids = input('ids');
+        Db::name('Article')->where('id in ('.$ids.')')->delete();
+        return true;
     }
 }
